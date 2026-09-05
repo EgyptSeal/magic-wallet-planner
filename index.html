@@ -528,6 +528,15 @@ img,canvas,svg,video{max-width:100%;height:auto}
   .mobile-nav{display:none!important}
 }
 
+
+/* ===== Enhanced Receipt / Invoice Scanner ===== */
+.scan-stage img,.scan-stage video{width:100%;max-height:58vh;object-fit:contain;border-radius:16px;background:#111}
+.scan-quality{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.scan-quality div{padding:9px 10px;border-radius:14px;background:rgba(124,92,255,.05);border:1px solid var(--line);font-size:11px;color:var(--muted)}
+.ocr-confidence{height:8px;border-radius:999px;background:rgba(124,92,255,.1);overflow:hidden}
+.ocr-confidence>span{display:block;height:100%;background:linear-gradient(90deg,#ef596f,#f6b84d,#1bbb7a)}
+@media(max-width:560px){.scan-quality{grid-template-columns:1fr}}
+
 </style>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -958,15 +967,15 @@ img,canvas,svg,video{max-width:100%;height:auto}
         <div id="scanEmpty" style="text-align:center;padding:24px">
           <div style="font-size:46px;margin-bottom:8px">🧾</div>
           <b>Scan a receipt, invoice or photo</b>
-          <div class="voice-hint">Use your camera or choose an image. OCR runs in your browser and you can review the detected entry before saving.</div>
+          <div class="voice-hint">Use your camera or choose a clear image. The scanner enhances the photo first, then reads Arabic + English and lets you review merchant, total, VAT/tax, date and category before saving.</div>
         </div>
         <div class="scan-line"></div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <button class="secondary-btn" id="startCamera">📷 Live camera</button>
+        <button class="secondary-btn" id="startCamera">📷 Live camera / الكاميرا</button>
         <button class="secondary-btn" id="captureReceipt" disabled>◎ Capture</button>
-        <label class="secondary-btn" style="display:inline-block">🖼 Choose photo<input id="receiptPhoto" type="file" accept="image/*" capture="environment" hidden></label>
-        <button class="primary-btn" id="runReceiptOcr" disabled>✨ Read receipt</button>
+        <label class="secondary-btn" style="display:inline-block">🖼 Choose photo / اختر صورة<input id="receiptPhoto" type="file" accept="image/*" capture="environment" hidden></label>
+        <select id="scanOcrLanguage" style="width:180px"><option value="ara+eng" selected>العربية + English</option><option value="ara">العربية فقط</option><option value="eng">English only</option></select><button class="primary-btn" id="runReceiptOcr" disabled>✨ Read receipt / اقرأ الفاتورة</button>
       </div>
       <div id="scanStatus" class="voice-hint" style="margin-top:9px"></div>
       <div id="scanPreview" class="suggestion" hidden></div>
@@ -2562,66 +2571,193 @@ async function startReceiptCamera(){
  if(!navigator.mediaDevices?.getUserMedia){status.textContent='Camera is unavailable here. Use the localhost launcher or HTTPS.';return}
  try{
    stopReceiptCamera();
-   receiptStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
+   receiptStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:2560},height:{ideal:1440},focusMode:{ideal:'continuous'}},audio:false});
    const v=document.getElementById('scanVideo');v.srcObject=receiptStream;v.hidden=false;document.getElementById('scanImage').hidden=true;document.getElementById('scanEmpty').hidden=true;
-   document.getElementById('captureReceipt').disabled=false;status.textContent='Camera ready. Fill the frame with the receipt and capture.';
+   document.getElementById('captureReceipt').disabled=false;status.textContent='Camera ready. Keep the receipt flat, fill the frame, avoid glare, then capture.';
  }catch(e){status.textContent='Camera permission failed: '+(e.message||e.name)}
 }
 function stopReceiptCamera(){if(receiptStream){receiptStream.getTracks().forEach(t=>t.stop());receiptStream=null}const v=document.getElementById('scanVideo');if(v){v.srcObject=null}}
 function captureReceiptFrame(){
  const v=document.getElementById('scanVideo');if(!v.videoWidth)return;
- const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);receiptImageData=c.toDataURL('image/jpeg',.92);
+ const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);receiptImageData=c.toDataURL('image/jpeg',.98);
  const img=document.getElementById('scanImage');img.src=receiptImageData;img.hidden=false;v.hidden=true;stopReceiptCamera();document.getElementById('runReceiptOcr').disabled=false;actionFeedback('scan');
 }
 function loadReceiptFile(file){
- if(!file)return;const r=new FileReader();r.onload=()=>{receiptImageData=r.result;const img=document.getElementById('scanImage');img.src=receiptImageData;img.hidden=false;document.getElementById('scanVideo').hidden=true;document.getElementById('scanEmpty').hidden=true;document.getElementById('runReceiptOcr').disabled=false;document.getElementById('scanStatus').textContent='Photo loaded. Tap Read receipt.'};r.readAsDataURL(file);
+ if(!file)return;const r=new FileReader();r.onload=()=>{receiptImageData=r.result;const img=document.getElementById('scanImage');img.src=receiptImageData;img.hidden=false;document.getElementById('scanVideo').hidden=true;document.getElementById('scanEmpty').hidden=true;document.getElementById('runReceiptOcr').disabled=false;document.getElementById('scanStatus').textContent='Photo loaded. Tap Read receipt / اقرأ الفاتورة.'};r.readAsDataURL(file);
 }
-function parseReceiptText(text){
- const lines=String(text||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
- const noise=/^(invoice|receipt|tax invoice|thank you|tel|phone|date|time|cashier|qty|quantity)$/i;
- let merchant=lines.find(x=>x.length>=3&&x.length<=60&&!noise.test(x)&&!/\d{4,}/.test(x))||'Scanned receipt';
- const amountCandidates=[];
- const patterns=[
-   /(?:grand\s*total|amount\s*due|total\s*due|net\s*total|total|amount)[^\d]{0,14}(\d[\d,]*(?:\.\d{1,2})?)/gi,
-   /(\d[\d,]*(?:\.\d{1,2})?)\s*(?:egp|le|l\.e\.?|جنيه)/gi
+
+function normalizeArabicDigits(s){
+ const map={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','٫':'.','٬':','};
+ return String(s||'').replace(/[٠-٩٫٬]/g,ch=>map[ch]||ch);
+}
+function normalizeOcrText(s){
+ return normalizeArabicDigits(String(s||''))
+   .replace(/\u200f|\u200e/g,' ')
+   .replace(/[ـ]+/g,'')
+   .replace(/[ \t]+/g,' ')
+   .replace(/\r/g,'');
+}
+function receiptCategoryGuess(text,merchant){
+ const s=(String(text||'')+' '+String(merchant||'')).toLowerCase();
+ const map=[
+   [/(carrefour|hyper|market|grocery|supermarket|سوبر|ماركت|هايبر|بقال)/,'Groceries'],
+   [/(restaurant|cafe|coffee|starbucks|mcdonald|kfc|مطعم|كافيه|قهوة)/,'Dining'],
+   [/(fuel|petrol|gas station|shell|total energies|بنزين|وقود|محطة)/,'Fuel'],
+   [/(pharmacy|medicine|clinic|hospital|صيدلية|دواء|مستشفى|عيادة)/,'Health'],
+   [/(uber|careem|taxi|أوبر|كريم|تاكسي)/,'Uber / Ride Hailing'],
+   [/(internet|telecom|vodafone|orange|etisalat|we |اتصالات|فودافون|اورنج|انترنت)/,'Internet / Mobile'],
+   [/(electric|water|gas bill|utility|كهرباء|مياه|غاز)/,'Utilities'],
+   [/(clothes|fashion|zara|h&m|ملابس)/,'Clothes'],
+   [/(electronics|mobile|phone|computer|laptop|الكترون|موبايل|كمبيوتر)/,'Electronics']
  ];
- patterns.forEach((re,pi)=>{let m;while((m=re.exec(text))!==null){const n=Number(m[1].replace(/,/g,''));if(n>0)amountCandidates.push({n,score:pi===0?10:6,index:m.index})}});
- if(!amountCandidates.length){
-   [...String(text).matchAll(/\b(\d{1,7}(?:,\d{3})*(?:\.\d{2})?)\b/g)].forEach(m=>{const n=Number(m[1].replace(/,/g,''));if(n>=1&&n<10000000)amountCandidates.push({n,score:1,index:m.index})});
+ for(const [re,cat] of map){if(re.test(s))return cat}
+ try{return parseVoice(`${merchant||''} 100 expense`).category||'Miscellaneous'}catch(e){return 'Miscellaneous'}
+}
+function parseReceiptDate(text){
+ const t=normalizeOcrText(text);
+ const pats=[
+   /\b(20\d{2})[\/\-.](\d{1,2})[\/\-.](\d{1,2})\b/,
+   /\b(\d{1,2})[\/\-.](\d{1,2})[\/\-.](20\d{2}|\d{2})\b/,
+   /(?:date|تاريخ)\s*[:\-]?\s*(\d{1,2})[\/\-.](\d{1,2})[\/\-.](20\d{2}|\d{2})/i
+ ];
+ for(let i=0;i<pats.length;i++){
+   const m=t.match(pats[i]); if(!m)continue;
+   let y,mo,d;
+   if(i===0){y=+m[1];mo=+m[2];d=+m[3]}else{d=+m[1];mo=+m[2];y=+m[3];if(y<100)y+=2000}
+   const dt=new Date(y,mo-1,d,12);
+   if(!Number.isNaN(dt.getTime())&&dt.getFullYear()===y&&dt.getMonth()===mo-1&&dt.getDate()===d)
+     return `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
  }
- amountCandidates.sort((a,b)=>b.score-a.score||b.n-a.n);
- const amount=amountCandidates[0]?.n||0;
- const parsed=parseVoice(`${merchant} ${amount} expense`);
- return {name:merchant,amount,category:parsed.category,type:'expense',accountId:state.accounts[0]?.id||'',cardId:null,text};
+ return today();
+}
+function receiptMoneyCandidates(text){
+ const t=normalizeOcrText(text);
+ const defs=[
+   {re:/(?:grand\s*total|amount\s*due|total\s*due|net\s*total|final\s*total|الإجمالي\s*النهائي|اجمالي\s*نهائي|المبلغ\s*المستحق|المطلوب|الإجمالي|الاجمالي|الإجمالى|المجموع)[^\d]{0,24}(\d[\d,]*(?:\.\d{1,3})?)/gi,score:100},
+   {re:/(?:total|amount|balance|إجمالي|اجمالي|المبلغ|المجموع)[^\d]{0,20}(\d[\d,]*(?:\.\d{1,3})?)/gi,score:75},
+   {re:/(\d[\d,]*(?:\.\d{1,3})?)\s*(?:egp|le|l\.e\.?|جنيه|ج\.?م)/gi,score:60}
+ ];
+ const arr=[];
+ defs.forEach(x=>{let m;while((m=x.re.exec(t))!==null){const n=Number(m[1].replace(/,/g,''));if(n>0&&n<100000000)arr.push({n,score:x.score,index:m.index,raw:m[0]})}});
+ if(!arr.length){
+   [...t.matchAll(/\b(\d{1,8}(?:,\d{3})*(?:\.\d{1,3})?)\b/g)].forEach(m=>{
+     const n=Number(m[1].replace(/,/g,''));if(n>=1&&n<100000000)arr.push({n,score:10,index:m.index,raw:m[0]})
+   });
+ }
+ return arr.sort((a,b)=>b.score-a.score||b.index-a.index||b.n-a.n);
+}
+function parseTaxAmount(text,total){
+ const t=normalizeOcrText(text);
+ const re=/(?:vat|tax|value\s*added\s*tax|ضريبة|القيمة\s*المضافة)[^\d]{0,20}(\d[\d,]*(?:\.\d{1,3})?)/ig;
+ let m,best=0;
+ while((m=re.exec(t))!==null){
+   const n=Number(m[1].replace(/,/g,''));
+   if(n>0&&(!total||n<total))best=Math.max(best,n);
+ }
+ return best;
+}
+function parseReceiptText(text,confidence=0){
+ const clean=normalizeOcrText(text);
+ const lines=clean.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+ const noise=/^(invoice|receipt|tax invoice|thank you|tel|phone|date|time|cashier|qty|quantity|فاتورة|ايصال|إيصال|شكرا|شكراً|تاريخ|وقت|كاشير)$/i;
+ let merchant=lines.find(x=>x.length>=2&&x.length<=70&&!noise.test(x)&&!/^[-\d\s:.,/]+$/.test(x))||'Scanned receipt';
+ merchant=merchant.replace(/^[^A-Za-z\u0600-\u06FF]+|[^A-Za-z\u0600-\u06FF0-9 .&_-]+$/g,'').trim()||'Scanned receipt';
+ const candidates=receiptMoneyCandidates(clean);
+ const amount=candidates[0]?.n||0;
+ return {
+   name:merchant,
+   amount,
+   tax:parseTaxAmount(clean,amount),
+   date:parseReceiptDate(clean),
+   category:receiptCategoryGuess(clean,merchant),
+   type:'expense',
+   accountId:state.accounts[0]?.id||'',
+   cardId:null,
+   text:clean,
+   confidence:Number(confidence||0),
+   amountEvidence:candidates[0]?.raw||''
+ };
+}
+function loadImageElement(src){
+ return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src});
+}
+async function preprocessReceiptImage(dataUrl){
+ const img=await loadImageElement(dataUrl);
+ let scale=Math.min(2.2,2200/Math.max(1,img.width));
+ scale=Math.max(1,scale);
+ const w=Math.round(img.width*scale),h=Math.round(img.height*scale);
+ const c=document.createElement('canvas');c.width=w;c.height=h;
+ const ctx=c.getContext('2d',{willReadFrequently:true});
+ ctx.drawImage(img,0,0,w,h);
+ const im=ctx.getImageData(0,0,w,h),d=im.data;
+ for(let i=0;i<d.length;i+=4){
+   const gray=.299*d[i]+.587*d[i+1]+.114*d[i+2];
+   let v=(gray-128)*1.55+138;
+   v=Math.max(0,Math.min(255,v));
+   if(v>215)v=255; else if(v<55)v=0;
+   d[i]=d[i+1]=d[i+2]=v;
+ }
+ ctx.putImageData(im,0,0);
+ return c.toDataURL('image/jpeg',.95);
 }
 async function runReceiptOcr(){
  if(!receiptImageData)return;
- const status=document.getElementById('scanStatus'),stage=document.getElementById('scanStage');stage.classList.add('scanning');status.textContent='Loading OCR and reading the receipt…';
+ const status=document.getElementById('scanStatus'),stage=document.getElementById('scanStage');
+ stage.classList.add('scanning');
+ const lang=document.getElementById('scanOcrLanguage')?.value||'ara+eng';
+ status.textContent=state.profile?.appLang==='ar'?'جاري تحسين الصورة ثم قراءة الفاتورة…':'Enhancing image, then reading Arabic + English…';
  try{
+   const enhanced=await preprocessReceiptImage(receiptImageData);
+   const preview=document.getElementById('scanImage');
+   if(preview){preview.src=enhanced;preview.hidden=false}
    const T=await loadTesseract();
-   const result=await T.recognize(receiptImageData,'eng',{logger:m=>{if(m.status&&m.progress!=null)status.textContent=`${m.status} ${Math.round(m.progress*100)}%`}});
-   receiptOcrResult=parseReceiptText(result.data.text||'');showReceiptPreview();actionFeedback('scan');
- }catch(e){status.textContent='Could not read the image: '+(e.message||e)}
- finally{stage.classList.remove('scanning')}
+   const result=await T.recognize(enhanced,lang,{
+     logger:m=>{
+       if(m.status&&m.progress!=null){
+         const pct=Math.round(m.progress*100);
+         status.textContent=state.profile?.appLang==='ar'?`جاري القراءة ${pct}%`:`${m.status} ${pct}%`;
+       }
+     }
+   });
+   receiptOcrResult=parseReceiptText(result.data.text||'',result.data.confidence||0);
+   showReceiptPreview();
+   actionFeedback('scan');
+ }catch(e){
+   console.error('Receipt OCR failed',e);
+   status.textContent=(state.profile?.appLang==='ar'?'تعذر قراءة الصورة: ':'Could not read the image: ')+(e.message||e);
+ }finally{stage.classList.remove('scanning')}
 }
 function showReceiptPreview(){
  const r=receiptOcrResult,p=document.getElementById('scanPreview');if(!r)return;
- p.hidden=false;p.innerHTML=`<b>🧾 Detected receipt</b><div class="form-grid" style="margin-top:9px">
- <div class="field full"><label>Merchant / entry name</label><input id="scanName" value="${escapeHtml(r.name)}"></div>
- <div class="field"><label>Total amount (EGP)</label><input id="scanAmount" type="number" value="${r.amount||''}"></div>
- <div class="field"><label>Category</label><select id="scanCategory">${expenseCategories.map(x=>`<option value="${x[0]}" ${x[0]===r.category?'selected':''}>${x[1]} ${x[0]}</option>`).join('')}</select></div>
- <div class="field"><label>Payment method</label><select id="scanPaymentMethod"><option value="cash">Cash</option><option value="debit">Debit Card / Bank Account</option><option value="credit">Credit Card</option><option value="wallet">Mobile Wallet</option><option value="transfer">Bank Transfer / InstaPay</option><option value="other">Other</option></select></div>
- <div class="field"><label>Payment account</label><select id="scanAccount">${state.accounts.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('')}</select></div>
- <div class="field"><label>Credit card</label><select id="scanCard"><option value="">No credit card</option>${state.cards.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
- <div class="field full"><label>OCR text (editable reference)</label><textarea id="scanRawText" rows="5">${escapeHtml(r.text||'')}</textarea></div></div>`;
- enhanceDynamicSelects(p);
+ const lang=state.profile?.appLang||'en';
+ const conf=Math.max(0,Math.min(100,Number(r.confidence||0)));
+ p.hidden=false;
+ p.innerHTML=`<b>🧾 ${lang==='ar'?'مراجعة الفاتورة':'Receipt / invoice review'}</b>
+ <div class="scan-quality">
+   <div><b>${lang==='ar'?'ثقة القراءة':'OCR confidence'}</b><div class="ocr-confidence" style="margin-top:6px"><span style="width:${conf}%"></span></div><small>${conf.toFixed(0)}%</small></div>
+   <div><b>${lang==='ar'?'التاريخ المكتشف':'Detected date'}</b><div>${escapeHtml(r.date||today())}</div></div>
+   <div><b>${lang==='ar'?'الضريبة / VAT':'Tax / VAT'}</b><div>${r.tax?money(r.tax):'—'}</div></div>
+ </div>
+ <div class="form-grid" style="margin-top:10px">
+   <div class="field full"><label>${lang==='ar'?'اسم المتجر / المورد':'Merchant / supplier'}</label><input id="scanName" value="${escapeHtml(r.name)}"></div>
+   <div class="field"><label>${lang==='ar'?'الإجمالي بالجنيه':'Total amount (EGP)'}</label><input id="scanAmount" type="number" step=".01" value="${r.amount||''}"></div>
+   <div class="field"><label>${lang==='ar'?'التاريخ':'Date'}</label><input id="scanDate" type="date" value="${escapeHtml(r.date||today())}"></div>
+   <div class="field"><label>${lang==='ar'?'الضريبة / VAT':'Tax / VAT'}</label><input id="scanTax" type="number" step=".01" value="${r.tax||''}"></div>
+   <div class="field"><label>${lang==='ar'?'التصنيف':'Category'}</label><select id="scanCategory">${expenseCategories.map(x=>`<option value="${x[0]}" ${x[0]===r.category?'selected':''}>${x[1]} ${x[0]}</option>`).join('')}</select></div>
+   <div class="field"><label>${lang==='ar'?'طريقة الدفع':'Payment method'}</label><select id="scanPaymentMethod"><option value="cash">Cash / كاش</option><option value="debit">Debit / Bank</option><option value="credit">Credit Card</option><option value="wallet">Wallet</option><option value="transfer">Transfer / InstaPay</option><option value="other">Other</option></select></div>
+   <div class="field"><label>${lang==='ar'?'الحساب':'Payment account'}</label><select id="scanAccount">${state.accounts.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('')}</select></div>
+   <div class="field"><label>${lang==='ar'?'بطاقة الائتمان':'Credit card'}</label><select id="scanCard"><option value="">No credit card</option>${state.cards.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
+   <div class="field full"><label>${lang==='ar'?'النص المقروء — للمراجعة والتعديل':'OCR text — editable reference'}</label><textarea id="scanRawText" rows="7">${escapeHtml(r.text||'')}</textarea></div>
+ </div>`;
+ try{enhanceDynamicSelects(p)}catch(e){}
  document.getElementById('saveScannedEntry').disabled=!(r.amount>0);
- document.getElementById('scanStatus').textContent='Review the detected fields, then add the entry.';
+ document.getElementById('scanStatus').textContent=lang==='ar'?'راجع البيانات ثم اضغط إضافة العملية.':'Review the fields, then add the entry.';
 }
 function saveReceiptEntry(){
  const amount=Number(document.getElementById('scanAmount')?.value),name=document.getElementById('scanName')?.value.trim();if(!name||!(amount>0))return toast('Check merchant name and total amount');
- const tx={id:uid('tx'),type:'expense',name,amount,date:today(),category:document.getElementById('scanCategory').value,paymentMethod:document.getElementById('scanPaymentMethod').value,accountId:document.getElementById('scanAccount').value,
- cardId:document.getElementById('scanPaymentMethod').value==='credit'?(document.getElementById('scanCard').value||null):null,frequency:'one-time',note:'Receipt scan OCR',createdAt:new Date().toISOString()};
+ const tax=Number(document.getElementById('scanTax')?.value||0),scanDate=document.getElementById('scanDate')?.value||today();
+ const tx={id:uid('tx'),type:'expense',name,amount,date:scanDate,category:document.getElementById('scanCategory').value,paymentMethod:document.getElementById('scanPaymentMethod').value,accountId:document.getElementById('scanAccount').value,
+ cardId:document.getElementById('scanPaymentMethod').value==='credit'?(document.getElementById('scanCard').value||null):null,frequency:'one-time',note:`Receipt scan OCR${tax>0?` · VAT/Tax ${money(tax)}`:''}`,createdAt:new Date().toISOString()};
  state.transactions.push(tx);closeEntry();saveState();actionFeedback('success');toast('Scanned receipt added');
 }
 document.getElementById('startCamera').onclick=startReceiptCamera;
