@@ -761,6 +761,87 @@ html[data-theme="light"] #magicSky.custom-bg:after{background:linear-gradient(rg
   .category-bar-row{grid-template-columns:1fr auto}.category-track{grid-column:1/-1}
 }
 
+
+/* ===== Connected Brain + Full Theme Skins ===== */
+:root{
+ --skin-primary:#8B7BFF;--skin-secondary:#49E0BE;--skin-tertiary:#FFC46B;
+ --skin-bg0:#0B0819;--skin-bg1:#15102E;--skin-surface:rgba(22,16,47,.88);--skin-surface2:#1D1540;
+ --skin-text:#F7F4FF;--skin-muted:#C6BEDD;--skin-line:rgba(255,255,255,.13);
+ --skin-positive:#49E0BE;--skin-danger:#FF7C9B;--skin-warning:#FFC46B;
+ --skin-glow1:rgba(139,123,255,.40);--skin-glow2:rgba(73,224,190,.24);
+}
+html[data-theme="light"]{
+ --skin-bg0:#F4F1FA;--skin-bg1:#FFFFFF;--skin-surface:rgba(255,255,255,.90);--skin-surface2:#FFFFFF;
+ --skin-text:#171226;--skin-muted:#625A77;--skin-line:rgba(28,20,45,.12);
+}
+html[data-palette="ocean"]{--skin-primary:#2F7BFF;--skin-secondary:#33D1E6;--skin-tertiary:#FFB35C;--skin-positive:#26C99A;--skin-danger:#FF6F91;--skin-warning:#FFB35C;--skin-glow1:rgba(47,123,255,.42);--skin-glow2:rgba(51,209,230,.25)}
+html[data-theme="dark"][data-palette="ocean"]{--skin-bg0:#06111D;--skin-bg1:#0B1E33;--skin-surface:rgba(10,28,48,.90);--skin-surface2:#10263F}
+html[data-theme="light"][data-palette="ocean"]{--skin-bg0:#EEF6FF;--skin-bg1:#F8FBFF;--skin-surface:#FFFFFF;--skin-surface2:#F6FAFF}
+html[data-palette="emerald"]{--skin-primary:#18A878;--skin-secondary:#74DBA8;--skin-tertiary:#EAB55E;--skin-positive:#35C88B;--skin-danger:#F26476;--skin-warning:#EAB55E;--skin-glow1:rgba(24,168,120,.40);--skin-glow2:rgba(116,219,168,.25)}
+html[data-theme="dark"][data-palette="emerald"]{--skin-bg0:#06150F;--skin-bg1:#0A261C;--skin-surface:rgba(10,35,27,.92);--skin-surface2:#103126}
+html[data-theme="light"][data-palette="emerald"]{--skin-bg0:#EEF9F4;--skin-bg1:#F9FDFB;--skin-surface:#FFFFFF;--skin-surface2:#F5FCF8}
+html[data-palette="sunset"]{--skin-primary:#F06D49;--skin-secondary:#F7B44A;--skin-tertiary:#FF8C6B;--skin-positive:#54C99A;--skin-danger:#D94D68;--skin-warning:#F7B44A;--skin-glow1:rgba(240,109,73,.42);--skin-glow2:rgba(247,180,74,.25)}
+html[data-theme="dark"][data-palette="sunset"]{--skin-bg0:#190C08;--skin-bg1:#31150F;--skin-surface:rgba(49,23,16,.92);--skin-surface2:#402016}
+html[data-theme="light"][data-palette="sunset"]{--skin-bg0:#FFF2EC;--skin-bg1:#FFF9F5;--skin-surface:#FFFFFF;--skin-surface2:#FFF7F2}
+html[data-palette="rose"]{--skin-primary:#D95788;--skin-secondary:#B678FF;--skin-tertiary:#F0A65A;--skin-positive:#4CC9A0;--skin-danger:#EF5D70;--skin-warning:#F0A65A;--skin-glow1:rgba(217,87,136,.42);--skin-glow2:rgba(182,120,255,.25)}
+html[data-theme="dark"][data-palette="rose"]{--skin-bg0:#170A15;--skin-bg1:#2E1229;--skin-surface:rgba(46,18,41,.92);--skin-surface2:#3A1734}
+html[data-theme="light"][data-palette="rose"]{--skin-bg0:#FFF1F7;--skin-bg1:#FFF9FC;--skin-surface:#FFFFFF;--skin-surface2:#FFF7FB}
+html[data-palette="graphite"]{--skin-primary:#697386;--skin-secondary:#A1ACBB;--skin-tertiary:#D8A354;--skin-positive:#54BE98;--skin-danger:#E06474;--skin-warning:#D8A354;--skin-glow1:rgba(105,115,134,.40);--skin-glow2:rgba(161,172,187,.22)}
+html[data-theme="dark"][data-palette="graphite"]{--skin-bg0:#0D1014;--skin-bg1:#171C23;--skin-surface:rgba(25,30,38,.94);--skin-surface2:#202731}
+html[data-theme="light"][data-palette="graphite"]{--skin-bg0:#F1F3F5;--skin-bg1:#FAFBFC;--skin-surface:#FFFFFF;--skin-surface2:#F8F9FA}
+html[data-palette="nile"]{--skin-primary:#8B7BFF;--skin-secondary:#49E0BE;--skin-tertiary:#FFC46B;--skin-positive:#49E0BE;--skin-danger:#FF7C9B;--skin-warning:#FFC46B;--skin-glow1:rgba(139,123,255,.40);--skin-glow2:rgba(73,224,190,.24)}
+html[data-theme="dark"][data-palette="nile"]{--skin-bg0:#0B0819;--skin-bg1:#150F2E;--skin-surface:rgba(22,16,47,.90);--skin-surface2:#1D1540}
+html[data-theme="light"][data-palette="nile"]{--skin-bg0:#F2EEFF;--skin-bg1:#FAF8FF;--skin-surface:#FFFFFF;--skin-surface2:#F8F5FF}
+
+html,body{background:var(--skin-bg0)!important;color:var(--skin-text)!important}
+body.has-custom-bg{background:transparent!important}
+#magicSky{
+ background:
+ radial-gradient(75% 62% at 15% 0%,var(--skin-glow1),transparent 72%),
+ radial-gradient(70% 55% at 95% 18%,var(--skin-glow2),transparent 70%),
+ linear-gradient(155deg,var(--skin-bg1),var(--skin-bg0))!important;
+}
+#magicSky.custom-bg{
+ background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;background-attachment:fixed!important
+}
+#magicSky.custom-bg .mw-blob{opacity:.12!important}
+#magicSky.custom-bg:after{z-index:0!important}
+.mw-blob{z-index:1}.mw-b1{background:radial-gradient(circle,var(--skin-glow1),transparent 68%)!important}.mw-b2{background:radial-gradient(circle,var(--skin-glow2),transparent 68%)!important}.mw-b3{background:radial-gradient(circle,color-mix(in srgb,var(--skin-tertiary) 25%,transparent),transparent 68%)!important}
+.app,.main{background:transparent!important}
+.sidebar,.panel,.premium-hero,.stat,.account-card,.goal-card,.setting-card,.data-action,.transaction,.forecast-kpi,.story-card,.mw-game-card,.mw-slider-card,.mw-month-card,.suggestion,.cc{
+ background:var(--skin-surface)!important;color:var(--skin-text)!important;border-color:var(--skin-line)!important
+}
+.sidebar{box-shadow:14px 0 46px color-mix(in srgb,var(--skin-bg0) 45%,transparent)!important}
+.mobile-nav{background:color-mix(in srgb,var(--skin-surface2) 90%,transparent)!important;border-color:var(--skin-line)!important}
+.sidebar button.active,.mobile-nav button.active{background:color-mix(in srgb,var(--skin-primary) 22%,transparent)!important;color:var(--skin-text)!important}
+.primary-btn,.fab{background:linear-gradient(145deg,var(--skin-primary),color-mix(in srgb,var(--skin-primary) 68%,var(--skin-secondary)))!important;color:#fff!important;box-shadow:0 10px 26px color-mix(in srgb,var(--skin-primary) 32%,transparent)!important}
+.secondary-btn{background:color-mix(in srgb,var(--skin-surface2) 82%,var(--skin-primary) 18%)!important;color:var(--skin-text)!important;border-color:color-mix(in srgb,var(--skin-primary) 28%,var(--skin-line))!important}
+.mw-magic-hero{background:linear-gradient(150deg,color-mix(in srgb,var(--skin-primary) 25%,var(--skin-surface)),color-mix(in srgb,var(--skin-secondary) 10%,var(--skin-surface2)))!important;border-color:color-mix(in srgb,var(--skin-primary) 32%,var(--skin-line))!important;box-shadow:0 24px 64px color-mix(in srgb,var(--skin-primary) 18%,transparent)!important}
+.mw-orb-core{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.30),color-mix(in srgb,var(--skin-primary) 22%,transparent) 42%,transparent 70%)!important;box-shadow:0 0 60px color-mix(in srgb,var(--skin-primary) 38%,transparent),inset 0 0 36px color-mix(in srgb,var(--skin-primary) 20%,transparent)!important}
+.mw-ring{stroke:var(--skin-primary)}
+.mw-orb-text b{background:linear-gradient(155deg,var(--skin-text),var(--skin-secondary))!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.progress span,.category-fill,.mw-xp-track span{background:linear-gradient(90deg,var(--skin-primary),var(--skin-secondary))!important}
+.forecast-positive,.tx-amt.income,.pos{color:var(--skin-positive)!important}.forecast-negative,.tx-amt.expense,.neg{color:var(--skin-danger)!important}
+.tag,.chip.active,.plan-chip{border-color:color-mix(in srgb,var(--skin-primary) 35%,var(--skin-line))!important;background:color-mix(in srgb,var(--skin-primary) 14%,transparent)!important;color:var(--skin-text)!important}
+.cc{background:linear-gradient(145deg,color-mix(in srgb,var(--skin-primary) 65%,#15172A),color-mix(in srgb,var(--skin-secondary) 35%,#10131F))!important}
+.stat-ico,.nav-ico,.tx-ico{filter:saturate(1.05)}
+.sub,.hint,.tx-meta,.forecast-kpi span,.story-card p,.suggestion p,.setting-card .sub,.data-action span{color:var(--skin-muted)!important}
+input,select,textarea,.search-select-input{background:var(--skin-surface2)!important;color:var(--skin-text)!important;border-color:var(--skin-line)!important}
+table,th,td{color:var(--skin-text)!important}th{color:var(--skin-muted)!important}
+.mw-game-card:nth-child(1) .mw-i3d,.mw-i3d-mint{background:linear-gradient(145deg,var(--skin-secondary),color-mix(in srgb,var(--skin-secondary) 70%,#111))!important}
+.mw-game-card:nth-child(2) .mw-i3d,.mw-i3d-gold{background:linear-gradient(145deg,var(--skin-tertiary),color-mix(in srgb,var(--skin-tertiary) 70%,#111))!important}
+.mw-game-card:nth-child(3) .mw-i3d,.mw-i3d-iris{background:linear-gradient(145deg,var(--skin-primary),color-mix(in srgb,var(--skin-primary) 70%,#111))!important}
+.palette-choice.active{outline-color:var(--skin-primary)!important}
+.background-preview{width:180px;height:72px;margin-top:8px;border-radius:12px;border:1px solid var(--skin-line);display:grid;place-items:center;background:var(--skin-surface2);background-size:cover;background-position:center;color:var(--skin-muted);font-size:10px;overflow:hidden}
+.magic-brain-details{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;position:relative;z-index:2;margin-top:2px}
+.brain-chip{padding:10px;border-radius:15px;border:1px solid var(--skin-line);background:color-mix(in srgb,var(--skin-surface2) 85%,var(--skin-primary) 15%);min-width:0}
+.brain-chip span{display:block;color:var(--skin-muted);font-size:10px}.brain-chip b{display:block;margin-top:3px;font-size:13px;overflow:hidden;text-overflow:ellipsis}
+.brain-chip.good b{color:var(--skin-positive)}.brain-chip.warn b{color:var(--skin-warning)}.brain-chip.bad b{color:var(--skin-danger)}
+.magic-status-banner{padding:11px 13px;border-radius:15px;margin-top:8px;border:1px solid var(--skin-line);font-size:12px;line-height:1.5;background:color-mix(in srgb,var(--skin-surface2) 88%,var(--skin-primary) 12%)}
+.magic-status-banner.good{border-color:color-mix(in srgb,var(--skin-positive) 35%,var(--skin-line))}.magic-status-banner.warn{border-color:color-mix(in srgb,var(--skin-warning) 35%,var(--skin-line))}.magic-status-banner.bad{border-color:color-mix(in srgb,var(--skin-danger) 35%,var(--skin-line))}
+@media(max-width:900px){.magic-brain-details{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.magic-brain-details{grid-template-columns:1fr}.background-preview{width:100%;height:100px}}
+
 </style>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -816,7 +897,7 @@ html[data-theme="light"] #magicSky.custom-bg:after{background:linear-gradient(rg
     <section class="view active" id="view-dashboard">
       <div class="mw-magic-hero" id="magicSafeHero">
         <div class="mw-hero-copy">
-          <div class="mw-eyebrow">✨ MAGIC MONEY STATUS</div>
+          <div class="mw-eyebrow">✨ MAGIC MONEY STATUS · CONNECTED BRAIN</div>
           <h2 id="magicHeroTitle">What can I safely spend today?</h2>
           <p id="magicHeroText">Your real accounts, incoming money, plans and protected cushion — turned into one easy number.</p>
           <div class="mw-hero-actions">
@@ -844,7 +925,7 @@ html[data-theme="light"] #magicSky.custom-bg:after{background:linear-gradient(rg
             </div>
           </div>
         </div>
-        <div class="mw-safe-calc" id="magicSafeCalc" hidden></div>
+        <div class="mw-safe-calc" id="magicSafeCalc" hidden></div><div class="magic-brain-details" id="magicBrainDetails"></div>
       </div>
 
       <div class="mw-game-strip">
@@ -1188,7 +1269,7 @@ html[data-theme="light"] #magicSky.custom-bg:after{background:linear-gradient(rg
             <button class="palette-choice" data-palette="rose"><span class="palette-dots"><i></i><i></i><i></i></span><b>Rose</b></button>
             <button class="palette-choice" data-palette="graphite"><span class="palette-dots"><i></i><i></i><i></i></span><b>Graphite</b></button>
           </div>
-          <div class="settings-row"><div><b>Custom background</b><div class="sub">Choose a photo from your phone, tablet or computer gallery. It stays on this device and is included in backup.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><label class="secondary-btn" for="backgroundPicker">Choose image</label><input id="backgroundPicker" type="file" accept="image/*" hidden><button class="secondary-btn" id="removeBackground" type="button">Remove</button></div></div>
+          <div class="settings-row"><div><b>Custom background</b><div class="sub">Choose a photo from your phone, tablet or computer gallery. It stays on this device and is included in backup.</div><div id="backgroundPreview" class="background-preview">No custom background selected</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><label class="secondary-btn" for="backgroundPicker">Choose image</label><input id="backgroundPicker" type="file" accept="image/*" hidden><button class="secondary-btn" id="removeBackground" type="button">Remove</button></div></div>
           <div style="margin-top:15px"><b>App experience</b><div class="sub">Fine-tune motion, sounds, privacy and automation.</div></div>
           <div class="switch-grid" style="margin-top:10px">
             <div class="setting-card"><div><b>App sounds</b><div class="sub">Different sounds for save, delete, scan and success</div></div><label class="toggle"><input id="soundEnabled" type="checkbox"><span class="slider"></span></label></div>
@@ -4424,6 +4505,261 @@ renderDashboard=function(){__uxRenderDashboard();try{drawCategory();renderSmartC
 const __uxRenderSettings=renderSettings;
 renderSettings=function(){__uxRenderSettings();try{uxApplyPalette();uxApplyBackground()}catch(e){}};
 uxEnsure();setTimeout(()=>{uxBindExtras();try{renderAll();drawCategory();renderSmartCoach()}catch(e){}},0);
+
+
+/* ===== Connected Money Brain / Full Skin Engine ===== */
+function connectedMoneyBrain(){
+ uxEnsure();magicFusionEnsure();
+ const now=new Date(),todayStr=today(),key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+ const liquid=allLiquid();
+ const cardDebt=allCardDebt();
+ const savingsCash=(state.savings||[]).filter(s=>s.type==='cash').reduce((a,s)=>a+Number(s.amount||0),0);
+ const goldValue=(state.savings||[]).filter(s=>s.type==='gold').reduce((a,s)=>a+savingCurrentValue(s),0);
+ const savingsTotal=savingsCash+goldValue;
+ const baseline=uxMonthlyBaseline();
+
+ let futureIncome=0,futureExpense=0,upcomingCount=0;
+ // recurring events remaining this month
+ (state.recurringTemplates||[]).filter(r=>r.active!==false).forEach(r=>{
+   try{
+     datesForRecurringTemplateInMonth(r,now.getFullYear(),now.getMonth()).forEach(date=>{
+       if(date>todayStr){
+         const a=Number(r.amount||0); if(r.type==='income')futureIncome+=a; else if(r.type==='expense')futureExpense+=a;
+         upcomingCount++;
+       }
+     });
+   }catch(e){}
+ });
+ // explicit plans this month
+ (state.plannedEntries||[]).filter(p=>p.monthKey===key).forEach(p=>{
+   const a=Number(p.amount||0);if(p.type==='income')futureIncome+=a;else if(p.type==='expense')futureExpense+=a;upcomingCount++;
+ });
+ // scheduled one-time transactions in future
+ (state.transactions||[]).filter(t=>(t.frequency||'one-time')==='one-time'&&(t.date||'').slice(0,7)===key&&(t.date||'')>todayStr&&!t.autoRecurring).forEach(t=>{
+   const a=Number(t.amount||0);if(t.type==='income')futureIncome+=a;else if(t.type==='expense')futureExpense+=a;upcomingCount++;
+ });
+
+ // estimate everyday spending still to happen based on baseline and current pace
+ const monthDays=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),daysLeft=Math.max(1,monthDays-now.getDate()+1),fractionLeft=daysLeft/monthDays;
+ const actualOut=txAmount('expense',key),actualIn=txAmount('income',key);
+ const paceProjection=actualOut/Math.max(1,now.getDate())*monthDays;
+ const normalMonthly=Math.max(Number(state.profile.magicEveryday||0),baseline.expense);
+ const projectedMonthSpend=Math.max(actualOut,paceProjection,normalMonthly);
+ const everydayRemaining=Math.max(0,projectedMonthSpend-actualOut-futureExpense);
+
+ // card minimums due this month
+ let cardDue=0,cardsDue=[];
+ (state.cards||[]).forEach(c=>{
+   const bal=Math.max(0,cardBalance(c.id));if(!bal)return;
+   const due=Number(c.dueDay||25);
+   if(due>=now.getDate()){
+     const min=typeof cardMinimumDue==='function'?cardMinimumDue(c,bal):Math.min(bal,Math.max(bal*.05,0));
+     cardDue+=min;cardsDue.push({name:c.name,amount:min,due});
+   }
+ });
+
+ const cushion=Math.max(0,Number(state.profile.magicCushion||0));
+ const unfinishedGoals=(state.goals||[]).map(g=>({...g,left:Math.max(0,Number(g.target||0)-Number(g.saved||0))})).filter(g=>g.left>0);
+ const monthlySurplus=Math.max(0,baseline.income-baseline.expense);
+ const goalReserve=unfinishedGoals.length?Math.min(unfinishedGoals[0].left,monthlySurplus*(cardDebt>0?.15:.35)):0;
+
+ const essentialOut=futureExpense+everydayRemaining+cardDue;
+ const free=liquid+futureIncome-essentialOut-cushion-goalReserve;
+ const safePerDay=free/daysLeft;
+
+ const forecast=buildMagicForecast(6,'base');
+ const firstNegative=forecast.rows.find(r=>r.running<0)||null;
+ const lowest=forecast.rows.length?[...forecast.rows].sort((a,b)=>a.running-b.running)[0]:null;
+ const netWorth=liquid+savingsTotal+(state.assets||[]).reduce((s,a)=>s+assetCurrentValue(a),0)-cardDebt;
+
+ // liquidity backup if short
+ const shortage=Math.max(0,-free);
+ const coverByCashSavings=Math.min(shortage,savingsCash);
+ const coverByGold=Math.min(Math.max(0,shortage-coverByCashSavings),goldValue);
+
+ let health=100;
+ if(free<0)health-=35;
+ if(cardDebt>Math.max(1,liquid+savingsCash)*.5)health-=20;
+ if(firstNegative)health-=20;
+ if(liquid<baseline.expense)health-=15;
+ if(monthlySurplus<=0)health-=15;
+ health=clamp(Math.round(health),0,100);
+ const tone=health>=75?'good':health>=50?'warn':'bad';
+
+ return {
+   liquid,actualIn,actualOut,futureIncome,futureExpense,everydayRemaining,cardDue,cardsDue,
+   cushion,goalReserve,free,safePerDay,daysLeft,baseline,monthlySurplus,
+   cardDebt,savingsCash,goldValue,savingsTotal,shortage,coverByCashSavings,coverByGold,
+   forecast,firstNegative,lowest,netWorth,health,tone,upcomingCount,unfinishedGoals
+ };
+}
+function magicFusionSafe(){return connectedMoneyBrain()}
+function renderMagicFusionHome(){
+ const hero=document.getElementById('magicSafeHero');if(!hero)return;
+ const b=connectedMoneyBrain(),m=calcMonth();
+ const safe=Math.max(0,b.safePerDay);
+ const val=document.getElementById('magicSafeValue'),label=document.getElementById('magicSafeLabel'),foot=document.getElementById('magicSafeFoot');
+ val.textContent=money(safe);
+ label.textContent=b.free<0?'Daily shortfall risk':'Safe to spend today';
+ foot.textContent=`${b.daysLeft} day${b.daysLeft===1?'':'s'} left · health ${b.health}/100`;
+
+ const C=2*Math.PI*93,ring=document.getElementById('magicSafeRing');
+ const basis=Math.max(1,b.liquid+b.futureIncome);
+ const pct=clamp(Math.max(0,b.free)/basis,0,1);
+ if(ring){ring.setAttribute('stroke-dasharray',C);ring.style.stroke=b.tone==='good'?'var(--skin-positive)':b.tone==='warn'?'var(--skin-warning)':'var(--skin-danger)';requestAnimationFrame(()=>ring.setAttribute('stroke-dashoffset',C*(1-pct)))}
+
+ let status;
+ if(b.free<0){
+   status=`Your month is under pressure by about ${money(Math.abs(b.free))}. I included upcoming plans, normal spending, card minimums, your protected cushion and a small goal reserve.`;
+   if(b.savingsTotal>0)status+=` You have ${money(b.savingsTotal)} in savings/gold as backup, but I do not count it as everyday spending money.`;
+ }else if(b.firstNegative){
+   status=`Today is manageable, but ${b.firstNegative.label} is projected to become negative. I am keeping today's safe-spend number conservative so future plans are not ignored.`;
+ }else if(b.cardDebt>0){
+   status=`You are currently on track. The number already protects ${money(b.cardDue)} for card payments due this month and keeps your future plans in view.`;
+ }else{
+   status=`You are currently on track. This number connects your real cash, future income, planned costs, normal spending, cushion, goals and 6-month cashflow.`;
+ }
+ document.getElementById('magicHeroText').textContent=status;
+
+ const calc=document.getElementById('magicSafeCalc');
+ if(calc)calc.innerHTML=[
+   ['Liquid money now',money(b.liquid)],
+   ['Income still expected','+'+money(b.futureIncome)],
+   ['Planned / recurring ahead','−'+money(b.futureExpense)],
+   ['Normal spending remaining','−'+money(b.everydayRemaining)],
+   ['Card payments protected','−'+money(b.cardDue)],
+   ['Protected cushion','−'+money(b.cushion)],
+   ['Goal reserve','−'+money(b.goalReserve)],
+   ['Free before month-end',money(b.free)]
+ ].map(x=>`<div class="mw-calc-item"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+
+ const details=document.getElementById('magicBrainDetails');
+ if(details)details.innerHTML=`
+   <div class="brain-chip ${b.tone}"><span>Money health</span><b>${b.health}/100</b></div>
+   <div class="brain-chip ${b.cardDebt>0?'warn':'good'}"><span>Card debt</span><b>${money(b.cardDebt)}</b></div>
+   <div class="brain-chip ${b.savingsTotal>0?'good':''}"><span>Savings + gold backup</span><b>${money(b.savingsTotal)}</b></div>
+   <div class="brain-chip ${b.firstNegative?'bad':'good'}"><span>6-month outlook</span><b>${b.firstNegative?'Risk in '+b.firstNegative.label:'No negative month'}</b></div>
+   <div class="magic-status-banner ${b.tone}" style="grid-column:1/-1"><b>${b.tone==='good'?'✅ Strong enough to plan':'⚠️ Needs attention'}</b><br>${b.shortage>0?`To close the current gap, cash savings could cover ${money(b.coverByCashSavings)}${b.coverByGold>0?` and gold could cover about ${money(b.coverByGold)}`:''}.`:`Projected monthly surplus is about ${money(b.monthlySurplus)} before new discretionary plans.`}</div>`;
+
+ const lvl=magicFusionLevel(),badges=MAGIC_BADGES.filter(x=>x.test()).length,streak=magicFusionStreak();
+ if(document.getElementById('magicLevelName'))document.getElementById('magicLevelName').textContent=lvl.name;
+ if(document.getElementById('magicXpText'))document.getElementById('magicXpText').textContent=`${lvl.xp} XP`;
+ if(document.getElementById('magicStreak'))document.getElementById('magicStreak').textContent=`${streak} day${streak===1?'':'s'}`;
+ if(document.getElementById('magicBadgeCount'))document.getElementById('magicBadgeCount').textContent=`${badges} unlocked`;
+
+ const bits=[
+   `You currently have <b>${money(b.liquid)}</b> in liquid accounts and <b>${money(b.savingsTotal)}</b> in savings/gold.`,
+   `This month <b>${money(b.actualIn)}</b> came in and <b>${money(b.actualOut)}</b> has gone out so far.`
+ ];
+ if(b.futureIncome>0)bits.push(`<b>${money(b.futureIncome)}</b> is still expected to arrive.`);
+ if(b.futureExpense>0)bits.push(`<b>${money(b.futureExpense)}</b> is already planned or recurring.`);
+ if(b.everydayRemaining>0)bits.push(`I estimate about <b>${money(b.everydayRemaining)}</b> more normal spending before month-end.`);
+ if(b.cardDue>0)bits.push(`I protected about <b>${money(b.cardDue)}</b> for card payments due this month.`);
+ if(b.unfinishedGoals.length)bits.push(`Your nearest unfinished goal is <b>${escapeHtml(b.unfinishedGoals[0].name)}</b>, so I reserved a reasonable contribution instead of pretending all surplus is free.`);
+ bits.push(b.firstNegative?`The first forecast warning is <b>${b.firstNegative.label}</b>.`:`Your next six months do not currently show a negative running balance.`);
+ document.getElementById('magicMoneyStory').innerHTML=`<div class="mw-story-line">${bits.join(' ')}</div>`;
+
+ try{renderSmartCoach()}catch(e){}
+}
+function fullThemePalette(){
+ uxEnsure();
+ const p=state.profile.settings.palette||'nile';
+ document.documentElement.dataset.palette=p;
+ // map legacy accents into the full skin so older inline components follow too
+ const map={nile:['#8B7BFF','#49E0BE','#FFC46B'],ocean:['#2F7BFF','#33D1E6','#FFB35C'],emerald:['#18A878','#74DBA8','#EAB55E'],sunset:['#F06D49','#F7B44A','#FF8C6B'],rose:['#D95788','#B678FF','#F0A65A'],graphite:['#697386','#A1ACBB','#D8A354']};
+ const v=map[p]||map.nile;
+ const root=document.documentElement;
+ root.style.setProperty('--accent',v[0]);root.style.setProperty('--accent2',v[1]);
+ root.style.setProperty('--purple',v[0]);root.style.setProperty('--green',v[1]);root.style.setProperty('--orange',v[2]);
+ document.querySelectorAll('.palette-choice').forEach(x=>x.classList.toggle('active',x.dataset.palette===p));
+ // recolor status icons that were originally inline hard-coded
+ document.querySelectorAll('.stat-ico').forEach((el,i)=>{el.style.background=`linear-gradient(145deg, ${i%2?v[1]:v[0]}, ${i%2?v[0]:v[2]})`});
+}
+function uxApplyPalette(){fullThemePalette()}
+applyAccent=function(){fullThemePalette()}
+function setTheme(force){
+ const auto=state.profile.autoTheme!==false;let theme=force||manualTheme;
+ if(!theme&&auto){const h=new Date().getHours();theme=(h>=6&&h<18)?'light':'dark'}
+ if(!theme)theme='light';
+ document.documentElement.dataset.theme=theme;
+ const b=document.getElementById('themeBtn');if(b)b.textContent=theme==='dark'?'☀':'☾';
+ fullThemePalette();uxApplyBackground();
+}
+function uxApplyBackground(){
+ uxEnsure();
+ const sky=document.getElementById('magicSky'),img=state.profile.backgroundImage||'',preview=document.getElementById('backgroundPreview');
+ document.body.classList.toggle('has-custom-bg',!!img);
+ if(sky){
+   sky.classList.toggle('custom-bg',!!img);
+   if(img){
+     sky.style.setProperty('background-image',`linear-gradient(color-mix(in srgb,var(--skin-bg0) 42%,transparent),color-mix(in srgb,var(--skin-bg0) 72%,transparent)),url("${img}")`,'important');
+     sky.style.setProperty('background-size','cover','important');
+     sky.style.setProperty('background-position','center','important');
+   }else{
+     sky.style.removeProperty('background-image');sky.style.removeProperty('background-size');sky.style.removeProperty('background-position');
+   }
+ }
+ if(preview){
+   preview.style.backgroundImage=img?`url("${img}")`:'';
+   preview.textContent=img?'Background selected ✓':'No custom background selected';
+ }
+}
+function uxResizeImage(file,maxW=1280,quality=.72){
+ return new Promise((resolve,reject)=>{
+   const r=new FileReader();
+   r.onload=()=>{const img=new Image();img.onload=()=>{
+     const scale=Math.min(1,maxW/img.width),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));
+     c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+     resolve(c.toDataURL('image/jpeg',quality));
+   };img.onerror=reject;img.src=r.result};r.onerror=reject;r.readAsDataURL(file)
+ })
+}
+function connectedCoach(){
+ const b=connectedMoneyBrain(),tips=[];
+ if(b.free<0){
+   tips.push({ico:'🚨',title:'Fix this month first',text:`You are short by about ${money(Math.abs(b.free))}. Delay flexible planned spending before selling assets. If needed, use up to ${money(b.coverByCashSavings)} cash savings${b.coverByGold>0?` then about ${money(b.coverByGold)} of gold`:''}.`});
+ }else if(b.cardDebt>0){
+   const cards=(state.cards||[]).map(c=>({c,bal:Math.max(0,cardBalance(c.id)),apr:Number(c.apr||0)})).filter(x=>x.bal>0).sort((a,b)=>(b.apr-a.apr)||(b.bal-a.bal));
+   if(cards[0]){
+     const pay=Math.min(cards[0].bal,Math.max(b.monthlySurplus*.55,b.cardDue));
+     tips.push({ico:'💳',title:`Debt mission: ${escapeHtml(cards[0].c.name)}`,text:`A practical target is around ${money(pay)} this month. I keep your cushion and known plans protected before suggesting that amount.`});
+   }
+ }
+ if(b.unfinishedGoals.length){
+   const g=b.unfinishedGoals[0],alloc=Math.max(0,Math.min(g.left,b.monthlySurplus*(b.cardDebt>0?.20:.50))),months=alloc>0?Math.ceil(g.left/alloc):null;
+   tips.push({ico:'🎯',title:`Goal path: ${escapeHtml(g.name)}`,text:months?`${money(alloc)} per month could complete the remaining ${money(g.left)} in about ${months} months without using the same money twice.`:`This goal should wait until monthly cash flow is positive.`});
+ }
+ if(b.firstNegative)tips.push({ico:'🔮',title:`Future warning: ${b.firstNegative.label}`,text:`Your running balance is projected to go below zero. Review plans in that month now rather than waiting until the problem arrives.`});
+ else tips.push({ico:'🌱',title:'Your future has breathing room',text:`No negative month appears in the next six months. Use surplus first for cushion, then expensive debt, then goals and longer-term savings.`});
+ return tips.slice(0,4);
+}
+function uxGoalDebtCoach(){return connectedCoach()}
+function renderSmartCoach(){
+ const box=document.getElementById('smartCoachList');if(!box)return;
+ box.innerHTML=connectedCoach().map(t=>`<div class="coach-action"><div class="ico">${t.ico}</div><div class="body"><b>${t.title}</b><p>${t.text}</p></div></div>`).join('');
+}
+function rebindConnectedExtras(){
+ document.querySelectorAll('.palette-choice').forEach(btn=>btn.onclick=()=>{
+   state.profile.settings.palette=btn.dataset.palette;state.profile.settings.accent=btn.dataset.palette;
+   try{localStorage.setItem('masrMoneyState',JSON.stringify(state))}catch(e){}
+   fullThemePalette();setTheme(document.documentElement.dataset.theme||'light');renderAll();toast(`${btn.textContent.trim()} theme applied`);
+ });
+ const bg=document.getElementById('backgroundPicker');
+ if(bg)bg.onchange=async e=>{
+   const f=e.target.files&&e.target.files[0];if(!f)return;
+   try{
+     state.profile.backgroundImage=await uxResizeImage(f);
+     try{localStorage.setItem('masrMoneyState',JSON.stringify(state))}catch(err){console.warn(err);toast('Image is too large for this browser');return}
+     uxApplyBackground();renderAll();toast('Background applied');
+   }catch(err){console.error(err);toast('Could not use this image')}
+ };
+ const rem=document.getElementById('removeBackground');if(rem)rem.onclick=()=>{
+   state.profile.backgroundImage='';try{localStorage.setItem('masrMoneyState',JSON.stringify(state))}catch(e){}
+   uxApplyBackground();toast('Background removed');
+ };
+ fullThemePalette();uxApplyBackground();
+}
+setTimeout(()=>{try{rebindConnectedExtras();renderMagicFusionHome();renderSmartCoach()}catch(e){console.warn('connected brain init',e)}},50);
 
 </script>
 </body>
