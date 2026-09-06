@@ -842,6 +842,271 @@ table,th,td{color:var(--skin-text)!important}th{color:var(--skin-muted)!importan
 @media(max-width:900px){.magic-brain-details{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.magic-brain-details{grid-template-columns:1fr}.background-preview{width:100%;height:100px}}
 
+
+/* ===== Light Theme Readability Upgrade ===== */
+html[data-theme="light"]{
+  --skin-text:#181622!important;
+  --skin-muted:#5F5A6B!important;
+  --skin-line:rgba(28,24,40,.16)!important;
+  --text:#181622!important;
+  --muted:#5F5A6B!important;
+  --line:rgba(28,24,40,.16)!important;
+  color-scheme:light;
+}
+
+/* Soft neutral surfaces instead of bright white */
+html[data-theme="light"][data-palette="nile"]{
+  --skin-bg0:#ECE8F6!important;
+  --skin-bg1:#F3F0F8!important;
+  --skin-surface:#F4F1F7!important;
+  --skin-surface2:#EAE6F1!important;
+}
+html[data-theme="light"][data-palette="ocean"]{
+  --skin-bg0:#E7EEF5!important;
+  --skin-bg1:#EEF3F8!important;
+  --skin-surface:#F1F5F8!important;
+  --skin-surface2:#E4EBF1!important;
+}
+html[data-theme="light"][data-palette="emerald"]{
+  --skin-bg0:#E5F0EA!important;
+  --skin-bg1:#EDF5F1!important;
+  --skin-surface:#F0F5F2!important;
+  --skin-surface2:#E2ECE7!important;
+}
+html[data-theme="light"][data-palette="sunset"]{
+  --skin-bg0:#F3E8E1!important;
+  --skin-bg1:#F7EFEA!important;
+  --skin-surface:#F7F1ED!important;
+  --skin-surface2:#EDE3DD!important;
+}
+html[data-theme="light"][data-palette="rose"]{
+  --skin-bg0:#F1E6EB!important;
+  --skin-bg1:#F6EDF1!important;
+  --skin-surface:#F6F0F3!important;
+  --skin-surface2:#EDE2E7!important;
+}
+html[data-theme="light"][data-palette="graphite"]{
+  --skin-bg0:#E7E9EC!important;
+  --skin-bg1:#EFF1F3!important;
+  --skin-surface:#F1F2F4!important;
+  --skin-surface2:#E2E5E8!important;
+}
+
+/* Global light-mode text protection */
+html[data-theme="light"] body,
+html[data-theme="light"] .app,
+html[data-theme="light"] .main,
+html[data-theme="light"] .view,
+html[data-theme="light"] .panel,
+html[data-theme="light"] .premium-hero,
+html[data-theme="light"] .stat,
+html[data-theme="light"] .account-card,
+html[data-theme="light"] .goal-card,
+html[data-theme="light"] .setting-card,
+html[data-theme="light"] .data-action,
+html[data-theme="light"] .transaction,
+html[data-theme="light"] .forecast-kpi,
+html[data-theme="light"] .story-card,
+html[data-theme="light"] .mw-game-card,
+html[data-theme="light"] .mw-slider-card,
+html[data-theme="light"] .mw-month-card,
+html[data-theme="light"] .suggestion,
+html[data-theme="light"] .modal,
+html[data-theme="light"] .modal *,
+html[data-theme="light"] .settings-row,
+html[data-theme="light"] .search-select-option,
+html[data-theme="light"] .easy-pill,
+html[data-theme="light"] .journey-card,
+html[data-theme="light"] .coach-action,
+html[data-theme="light"] .brain-chip,
+html[data-theme="light"] .magic-status-banner{
+  color:#181622!important;
+}
+
+html[data-theme="light"] .sub,
+html[data-theme="light"] .hint,
+html[data-theme="light"] .tx-meta,
+html[data-theme="light"] .forecast-kpi span,
+html[data-theme="light"] .story-card p,
+html[data-theme="light"] .suggestion p,
+html[data-theme="light"] .setting-card .sub,
+html[data-theme="light"] .data-action span,
+html[data-theme="light"] small,
+html[data-theme="light"] .mw-story-line,
+html[data-theme="light"] .mw-story-line *,
+html[data-theme="light"] .coach-action p,
+html[data-theme="light"] .brain-chip span,
+html[data-theme="light"] .magic-status-banner{
+  color:#5F5A6B!important;
+}
+
+/* Strong headings / financial numbers */
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] b,
+html[data-theme="light"] strong,
+html[data-theme="light"] .value,
+html[data-theme="light"] .account-balance,
+html[data-theme="light"] .tx-title,
+html[data-theme="light"] .forecast-kpi b,
+html[data-theme="light"] .mini-kpi b,
+html[data-theme="light"] .goal-card b,
+html[data-theme="light"] .brain-chip b{
+  color:#181622!important;
+}
+
+/* Inputs & dropdowns */
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea,
+html[data-theme="light"] .search-select-input,
+html[data-theme="light"] .search-select-menu,
+html[data-theme="light"] .search-select-option{
+  background:#E8E5EC!important;
+  color:#181622!important;
+  border-color:rgba(28,24,40,.18)!important;
+}
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder{
+  color:#77717F!important;
+  opacity:1!important;
+}
+
+/* Panels / cards / rows: more separation */
+html[data-theme="light"] .panel,
+html[data-theme="light"] .premium-hero,
+html[data-theme="light"] .stat,
+html[data-theme="light"] .account-card,
+html[data-theme="light"] .goal-card,
+html[data-theme="light"] .setting-card,
+html[data-theme="light"] .data-action,
+html[data-theme="light"] .transaction,
+html[data-theme="light"] .forecast-kpi,
+html[data-theme="light"] .story-card,
+html[data-theme="light"] .mw-game-card,
+html[data-theme="light"] .mw-slider-card,
+html[data-theme="light"] .mw-month-card,
+html[data-theme="light"] .suggestion,
+html[data-theme="light"] .coach-action,
+html[data-theme="light"] .brain-chip,
+html[data-theme="light"] .magic-status-banner,
+html[data-theme="light"] .modal{
+  background:var(--skin-surface)!important;
+  border-color:rgba(28,24,40,.15)!important;
+  box-shadow:0 8px 22px rgba(32,26,46,.08)!important;
+}
+
+/* Secondary surfaces slightly darker */
+html[data-theme="light"] .easy-pill,
+html[data-theme="light"] .journey-card,
+html[data-theme="light"] .category-track,
+html[data-theme="light"] .progress,
+html[data-theme="light"] .mw-calc-item,
+html[data-theme="light"] .palette-choice{
+  background:var(--skin-surface2)!important;
+  border-color:rgba(28,24,40,.15)!important;
+}
+
+/* Hero remains colorful but readable */
+html[data-theme="light"] .mw-magic-hero{
+  background:
+    linear-gradient(145deg,
+      color-mix(in srgb,var(--skin-primary) 14%,var(--skin-surface)),
+      color-mix(in srgb,var(--skin-secondary) 10%,var(--skin-surface2)))!important;
+  border-color:color-mix(in srgb,var(--skin-primary) 28%,rgba(28,24,40,.14))!important;
+}
+html[data-theme="light"] .mw-hero-copy h2,
+html[data-theme="light"] .mw-hero-copy p,
+html[data-theme="light"] .mw-eyebrow,
+html[data-theme="light"] .mw-orb-text span,
+html[data-theme="light"] .mw-orb-text small{
+  color:#26212F!important;
+}
+html[data-theme="light"] .mw-orb-text b{
+  background:linear-gradient(155deg,#17131F,var(--skin-primary))!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+}
+
+/* Buttons */
+html[data-theme="light"] .secondary-btn,
+html[data-theme="light"] .icon-btn,
+html[data-theme="light"] .pill-btn{
+  background:color-mix(in srgb,var(--skin-surface2) 80%,var(--skin-primary) 20%)!important;
+  color:#211D29!important;
+  border-color:color-mix(in srgb,var(--skin-primary) 25%,rgba(28,24,40,.14))!important;
+}
+html[data-theme="light"] .primary-btn,
+html[data-theme="light"] .fab{
+  color:#fff!important;
+}
+
+/* Sidebar / mobile navigation */
+html[data-theme="light"] .sidebar,
+html[data-theme="light"] .mobile-nav{
+  background:color-mix(in srgb,var(--skin-surface) 94%,transparent)!important;
+  border-color:rgba(28,24,40,.14)!important;
+}
+html[data-theme="light"] .sidebar button,
+html[data-theme="light"] .mobile-nav button{
+  color:#615B69!important;
+}
+html[data-theme="light"] .sidebar button.active,
+html[data-theme="light"] .mobile-nav button.active{
+  color:#181622!important;
+  background:color-mix(in srgb,var(--skin-primary) 16%,var(--skin-surface2))!important;
+}
+
+/* Tables */
+html[data-theme="light"] table,
+html[data-theme="light"] td,
+html[data-theme="light"] th{
+  color:#181622!important;
+}
+html[data-theme="light"] th{
+  color:#625C6B!important;
+}
+html[data-theme="light"] tbody tr{
+  border-color:rgba(28,24,40,.10)!important;
+}
+
+/* Preserve semantic colors while increasing readability */
+html[data-theme="light"] .forecast-positive,
+html[data-theme="light"] .tx-amt.income,
+html[data-theme="light"] .pos{
+  color:#087C5A!important;
+}
+html[data-theme="light"] .forecast-negative,
+html[data-theme="light"] .tx-amt.expense,
+html[data-theme="light"] .neg{
+  color:#B82F4E!important;
+}
+html[data-theme="light"] .warnc{
+  color:#9A6500!important;
+}
+
+/* Credit cards keep intentional dark contrast */
+html[data-theme="light"] .cc,
+html[data-theme="light"] .cc *{
+  color:#fff!important;
+}
+
+/* Custom photo background: panels become more opaque for readability */
+html[data-theme="light"] body.has-custom-bg .panel,
+html[data-theme="light"] body.has-custom-bg .premium-hero,
+html[data-theme="light"] body.has-custom-bg .stat,
+html[data-theme="light"] body.has-custom-bg .account-card,
+html[data-theme="light"] body.has-custom-bg .goal-card,
+html[data-theme="light"] body.has-custom-bg .transaction,
+html[data-theme="light"] body.has-custom-bg .forecast-kpi,
+html[data-theme="light"] body.has-custom-bg .suggestion{
+  background:color-mix(in srgb,var(--skin-surface) 95%,transparent)!important;
+  backdrop-filter:blur(18px) saturate(1.05)!important;
+}
+
 </style>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
