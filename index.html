@@ -734,7 +734,7 @@ img,canvas,svg,video{max-width:100%;height:auto}
 
     <section class="view" id="view-accounts">
       <div class="grid2">
-        <div class="panel"><div class="panel-head"><div><h3>Cash & bank accounts</h3><div class="sub">Cash, debit, wallet and bank balances</div></div><button class="primary-btn" id="addAccountBtn">+ Account</button></div><div id="accountList"></div></div>
+        <div class="panel"><div class="panel-head"><div><h3>Cash & bank accounts</h3><div class="sub">Cash, debit, wallet and bank balances</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary-btn" id="adjustAnyBalanceBtn" type="button">Adjust balance</button><button class="primary-btn" id="addAccountBtn">+ Account</button></div></div><div id="accountList"></div></div>
         <div class="panel"><div class="panel-head"><div><h3>Net worth snapshot</h3><div class="sub">Liquid account money minus credit-card balances — separate from Available Balance</div></div></div>
           <div class="kpi-strip"><div class="mini-kpi"><b id="nwAssets">EGP 0</b><span>Liquid assets</span></div><div class="mini-kpi"><b id="nwDebt">EGP 0</b><span>Card debt</span></div><div class="mini-kpi"><b id="nwNet">EGP 0</b><span>Net position</span></div><div class="mini-kpi"><b id="nwSavings">0%</b><span>Savings rate</span></div></div>
           <div id="balanceAudit" class="suggestion" style="margin-top:16px"></div>
@@ -1635,9 +1635,81 @@ window.editTx=id=>{
 };
 
 function renderAccounts(){
- document.getElementById('accountList').innerHTML=state.accounts.length?state.accounts.map(a=>`<div class="account-card"><div class="account-top"><div><div class="account-name">${escapeHtml(a.name)}</div><div class="account-type">${escapeHtml(a.type)}</div></div><button class="icon-btn" style="width:33px;height:33px" onclick="deleteAccount('${a.id}')">×</button></div><div class="account-balance">${money(accountBalance(a.id))}</div><div class="sub">Opening balance ${money(a.opening)}</div></div>`).join(''):'<div class="empty">Add your first account.</div>';
- const m=calcMonth(),assets=allLiquid(),debt=allCardDebt();document.getElementById('nwAssets').textContent=money(assets);document.getElementById('nwDebt').textContent=money(debt);document.getElementById('nwNet').textContent=money(assets-debt);document.getElementById('nwSavings').textContent=Math.round(m.rate)+'%';
+ document.getElementById('accountList').innerHTML=state.accounts.length?state.accounts.map(a=>`
+   <div class="account-card">
+     <div class="account-top">
+       <div><div class="account-name">${escapeHtml(a.name)}</div><div class="account-type">${escapeHtml(a.type)}</div></div>
+       <div style="display:flex;gap:6px">
+         <button class="icon-btn" style="width:36px;height:36px" onclick="openBalanceAdjust('${a.id}')" title="Adjust current balance">✎</button>
+         <button class="icon-btn" style="width:36px;height:36px" onclick="deleteAccount('${a.id}')" title="Delete account">×</button>
+       </div>
+     </div>
+     <div class="account-balance">${money(accountBalance(a.id))}</div>
+     <div class="sub">Opening balance ${money(a.opening)}</div>
+     <button class="secondary-btn" style="margin-top:10px;width:100%" onclick="openBalanceAdjust('${a.id}')">Adjust current balance</button>
+   </div>`).join(''):'<div class="empty">Add your first account.</div>';
+ const m=calcMonth(),assets=allLiquid(),debt=allCardDebt();
+ document.getElementById('nwAssets').textContent=money(assets);
+ document.getElementById('nwDebt').textContent=money(debt);
+ document.getElementById('nwNet').textContent=money(assets-debt);
+ document.getElementById('nwSavings').textContent=Math.round(m.rate)+'%';
 }
+
+window.openBalanceAdjust=function(id){
+ const a=accountById(id);
+ if(!a)return toast('Account not found');
+ const current=accountBalance(id);
+ const lang=state.profile?.appLang||'en';
+ openSimple(lang==='ar'?'تعديل الرصيد الحالي':'Adjust current balance',`
+   <div class="suggestion">
+     <b>${escapeHtml(a.name)}</b>
+     <p>${lang==='ar'?'الرصيد المحسوب الآن':'Calculated balance now'}: <b>${money(current)}</b></p>
+   </div>
+   <div class="form-grid" style="margin-top:12px">
+     <div class="field full">
+       <label>${lang==='ar'?'الرصيد الحقيقي الحالي':'Actual current balance'}</label>
+       <input id="adjustBalanceValue" type="number" step=".01" value="${Number(current).toFixed(2)}">
+     </div>
+     <div class="field full">
+       <label>${lang==='ar'?'ملاحظة':'Note'}</label>
+       <input id="adjustBalanceNote" value="${lang==='ar'?'تعديل يدوي للرصيد':'Manual balance adjustment'}">
+     </div>
+   </div>
+   <div class="quick-hint" style="margin-top:12px">
+     ${lang==='ar'?'سيتم إنشاء عملية تعديل بالفرق فقط، لذلك يظل سجل الحساب واضحاً ويمكن مراجعته لاحقاً.':'The app will create an adjustment transaction only for the difference, so your account history stays transparent.'}
+   </div>
+   <div style="text-align:right;margin-top:14px"><button class="primary-btn" id="simpleSave">${lang==='ar'?'تحديث الرصيد':'Update balance'}</button></div>
+ `,()=>{
+   const target=Number(document.getElementById('adjustBalanceValue').value);
+   if(!Number.isFinite(target))return toast(lang==='ar'?'أدخل رصيداً صحيحاً':'Enter a valid balance');
+   const before=accountBalance(id);
+   const diff=target-before;
+   const note=document.getElementById('adjustBalanceNote').value.trim()||(lang==='ar'?'تعديل يدوي للرصيد':'Manual balance adjustment');
+   if(Math.abs(diff)<0.005){closeSimple();return toast(lang==='ar'?'الرصيد مطابق بالفعل':'Balance already matches')}
+   state.transactions.push({
+     id:uid('tx'),
+     type:diff>0?'income':'expense',
+     name:lang==='ar'?'تعديل الرصيد':'Balance adjustment',
+     amount:Math.abs(diff),
+     date:today(),
+     category:'Balance Adjustment',
+     paymentMethod:'other',
+     accountId:id,
+     cardId:null,
+     frequency:'one-time',
+     note,
+     balanceAdjustment:true,
+     previousBalance:before,
+     targetBalance:target,
+     createdAt:new Date().toISOString()
+   });
+   closeSimple();
+   saveState();
+   actionFeedback('success');
+   toast(lang==='ar'?'تم تحديث الرصيد':'Balance updated');
+ });
+};
+
 window.deleteAccount=id=>{if(state.accounts.length<=1)return toast('Keep at least one account');if(state.transactions.some(t=>t.accountId===id))return toast('This account has transactions. Reassign or delete them first.');if(confirm('Delete account?')){state.accounts=state.accounts.filter(a=>a.id!==id);saveState()}}
 function currentMonthIncomeBase(){
  const m=calcMonth();
@@ -2283,7 +2355,7 @@ function bindAssetButtons(){
  }
 }
 
-function renderAll(){greeting();populateSelects();renderDashboard();renderTransactions();renderAccounts();renderCards();renderBudgets();renderPlanning();renderGoals();renderSavings();renderAssets();renderInsights();renderSettings();applyExperienceSettings();setTheme();bindAssetButtons();if(typeof bindResetButton==='function')bindResetButton();if(typeof bindPlanningButtons==='function')bindPlanningButtons();if(typeof __magicBindLang==='function')__magicBindLang();if(typeof bindUniversalHelp==='function')bindUniversalHelp();applyAppLanguage()}
+function renderAll(){greeting();populateSelects();renderDashboard();renderTransactions();renderAccounts();renderCards();renderBudgets();renderPlanning();renderGoals();renderSavings();renderAssets();renderInsights();renderSettings();applyExperienceSettings();setTheme();bindAssetButtons();if(typeof bindResetButton==='function')bindResetButton();if(typeof bindPlanningButtons==='function')bindPlanningButtons();if(typeof __magicBindLang==='function')__magicBindLang();if(typeof bindUniversalHelp==='function')bindUniversalHelp();if(typeof bindAdjustAnyBalance==='function')bindAdjustAnyBalance();applyAppLanguage()}
 function switchView(v){actionFeedback('nav');document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v)?.classList.add('active');document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'});if(v==='dashboard')setTimeout(()=>{drawCashflow();drawCategory()},50);if(v==='savings'&&state.profile.settings.goldAutoRefresh!==false)refreshGoldMarket(true);if(v==='assets')refreshAssetsMarket(true);if(v==='planning')setTimeout(renderPlanning,30)}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>switchView(b.dataset.view));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>switchView(b.dataset.go));
 function openEntry(mode='form'){
@@ -3794,6 +3866,23 @@ document.addEventListener('click',e=>{
     setTimeout(refreshMobileDockAfterRotate,50);
   }
 });
+
+
+function bindAdjustAnyBalance(){
+ const b=document.getElementById('adjustAnyBalanceBtn');
+ if(!b)return;
+ b.onclick=()=>{
+   const opts=(state.accounts||[]).map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${money(accountBalance(a.id))}</option>`).join('');
+   openSimple(state.profile?.appLang==='ar'?'اختر الحساب':'Choose account',`
+     <div class="field full"><label>${state.profile?.appLang==='ar'?'الحساب':'Account'}</label><select id="adjustAnyAccount">${opts}</select></div>
+     <div style="text-align:right;margin-top:14px"><button class="primary-btn" id="simpleSave">${state.profile?.appLang==='ar'?'التالي':'Next'}</button></div>
+   `,()=>{
+     const id=document.getElementById('adjustAnyAccount').value;
+     closeSimple();
+     setTimeout(()=>openBalanceAdjust(id),80);
+   });
+ };
+}
 
 </script>
 </body>
