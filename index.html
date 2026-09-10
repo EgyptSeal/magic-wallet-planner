@@ -1158,6 +1158,24 @@ html[data-theme="light"][data-palette="solar"]{--skin-bg0:#F1EBDD;--skin-bg1:#F6
 @media(max-width:820px){.global-period{order:3;width:100%;justify-content:center}.global-period button{flex:1}.tx-command-hero{padding:15px;align-items:flex-start}.tx-command-hero h2{font-size:19px}.tx-live-grid{grid-template-columns:1fr 1fr}.tx-intelligence-grid{grid-template-columns:1fr 1fr}.tx-filter-row{grid-template-columns:1fr}.tx-filter-meta{flex-wrap:wrap}.tx-filter-meta>span{flex-basis:100%}}
 @media(max-width:430px){.tx-command-hero{display:block}.tx-command-hero .primary-btn{width:100%;margin-top:10px}.tx-live-grid{grid-template-columns:1fr}.tx-intelligence-grid{grid-template-columns:1fr 1fr}.tx-group-head{grid-template-columns:auto minmax(0,1fr) auto}.tx-group-head .chev{grid-column:3;grid-row:1}.tx-group-head .g-total{grid-column:2/4;grid-row:2}.tx-compact-row{grid-template-columns:auto minmax(0,1fr) auto}.tx-compact-row .edit-mini{grid-column:3}}
 
+
+/* ===== Clarity-first Dashboard + Local Activity Scope ===== */
+.activity-scope-box{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 14px;margin-bottom:10px;border-radius:18px;border:1px solid var(--skin-line,var(--line));background:var(--skin-surface,var(--panel))}
+.activity-scope-copy{min-width:0}.activity-scope-copy b{display:block;font-size:13px}.activity-scope-copy span{display:block;font-size:10px;color:var(--skin-muted,var(--muted));margin-top:2px}
+.simple-money-snapshot{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.85fr);gap:12px;margin-bottom:12px}
+.snapshot-main{padding:20px 22px;border-radius:24px;border:1px solid color-mix(in srgb,var(--skin-primary,var(--accent)) 28%,var(--skin-line,var(--line)));background:linear-gradient(145deg,color-mix(in srgb,var(--skin-primary,var(--accent)) 13%,var(--skin-surface,var(--panel))),var(--skin-surface,var(--panel)));box-shadow:0 12px 30px rgba(0,0,0,.07)}
+.snapshot-label{display:block;font-size:12px;font-weight:800;color:var(--skin-muted,var(--muted));margin-bottom:4px}.snapshot-main>b{display:block;font-family:Outfit,Inter,sans-serif;font-size:36px;line-height:1.05;color:var(--skin-text,var(--text))}.snapshot-main>span:last-child{display:block;font-size:10px;color:var(--skin-muted,var(--muted));margin-top:7px;max-width:520px}
+.snapshot-side{display:grid;grid-template-columns:1fr;gap:7px}.snapshot-side>div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-radius:16px;border:1px solid var(--skin-line,var(--line));background:var(--skin-surface,var(--panel))}.snapshot-side span{font-size:10px;color:var(--skin-muted,var(--muted))}.snapshot-side b{font-size:13px;white-space:nowrap}
+#view-dashboard .cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+#view-dashboard .stat{padding:12px!important}
+#view-dashboard .stat .value{font-size:20px!important}
+#view-dashboard .mw-game-strip{margin-top:4px}
+#view-dashboard .mw-story-panel{margin-top:10px}
+.mw-magic-hero{margin-top:0!important}
+.mw-hero-copy h2{font-size:24px!important}
+@media(max-width:980px){.simple-money-snapshot{grid-template-columns:1fr}.snapshot-side{grid-template-columns:repeat(3,1fr)}#view-dashboard .cards{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.activity-scope-box{display:block}.activity-scope-box .global-period{margin-top:10px;width:100%}.snapshot-side{grid-template-columns:1fr}.snapshot-main{padding:17px}.snapshot-main>b{font-size:31px}#view-dashboard .cards{grid-template-columns:1fr}.mw-game-strip{grid-template-columns:1fr!important}}
+
 </style>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1203,22 +1221,30 @@ html[data-theme="light"][data-palette="solar"]{--skin-bg0:#F1EBDD;--skin-bg1:#F6
   <main class="main">
     <div class="topbar">
       <div class="greeting"><h2 id="hello">Good morning 👋</h2><p id="monthLabel">Your money picture for this month</p></div>
-      <div class="global-period" id="globalPeriodSwitch" aria-label="Time period">
-          <button type="button" data-period="day">Today</button>
-          <button type="button" data-period="month" class="active">Month</button>
-          <button type="button" data-period="year">Year</button>
-        </div><div class="top-actions">
+      <div class="top-actions">
         <button class="pill-btn" id="voiceTop">🎙 Voice entry</button>
         <button class="icon-btn" id="themeBtn" title="Theme">☾</button>
         <button class="icon-btn" id="quickMenu" title="Export">⇩</button>
       </div>
     </div>
 
-    <section class="view active" id="view-dashboard">
+    <section class="view active" id="view-dashboard"><div class="simple-money-snapshot" id="simpleMoneySnapshot">
+        <div class="snapshot-main">
+          <span class="snapshot-label" id="snapshotHandLabel">Money in hand now</span>
+          <b id="snapshotHandValue">EGP 0</b>
+          <span id="snapshotHandHelp">What is actually available across your cash, bank and wallet accounts right now.</span>
+        </div>
+        <div class="snapshot-side">
+          <div><span id="snapshotMonthInLabel">Came in this month</span><b id="snapshotMonthIn">EGP 0</b></div>
+          <div><span id="snapshotMonthOutLabel">Spent this month</span><b id="snapshotMonthOut">EGP 0</b></div>
+          <div><span id="snapshotMonthNetLabel">Left from this month</span><b id="snapshotMonthNet">EGP 0</b></div>
+        </div>
+      </div>
+      
       <div class="mw-magic-hero" id="magicSafeHero">
         <div class="mw-hero-copy">
-          <div class="mw-eyebrow">✨ MAGIC MONEY STATUS · CONNECTED BRAIN</div>
-          <h2 id="magicHeroTitle">What can I safely spend today?</h2>
+          <div class="mw-eyebrow">✨ WHAT CAN I SAFELY USE?</div>
+          <h2 id="magicHeroTitle">After protecting bills and plans, what is safe?</h2>
           <p id="magicHeroText">Your real accounts, incoming money, plans and protected cushion — turned into one easy number.</p>
           <div class="mw-hero-actions">
             <button class="primary-btn" id="magicQuickAdd" type="button">＋ Add money</button>
@@ -1260,13 +1286,13 @@ html[data-theme="light"][data-palette="solar"]{--skin-bg0:#F1EBDD;--skin-bg1:#F6
       </div>
 
       <div class="cards">
-        <div class="stat"><div class="stat-top"><small>Available balance</small><span class="stat-ico" style="background:linear-gradient(145deg,#7c5cff,#5f48d8)">
+        <div class="stat"><div class="stat-top"><small>Money in hand now</small><span class="stat-ico" style="background:linear-gradient(145deg,#7c5cff,#5f48d8)">
           <svg viewBox="0 0 24 24"><path d="M4 7h16v11H4z" fill="white"/><path d="M4 9h16M15 13h3" stroke="#6f52ea" stroke-width="1.7"/></svg></span></div><div class="value" id="kBalance">EGP 0</div><div class="delta" id="kBalanceSub">Across cash, bank & wallet accounts</div></div>
-        <div class="stat"><div class="stat-top"><small>Income this month</small><span class="stat-ico" style="background:linear-gradient(145deg,#14b86e,#0d9858)">
+        <div class="stat"><div class="stat-top"><small>This month income</small><span class="stat-ico" style="background:linear-gradient(145deg,#14b86e,#0d9858)">
           <svg viewBox="0 0 24 24"><path d="M12 4v16M7 9l5-5 5 5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div class="value" id="kIncome">EGP 0</div><div class="delta" id="kIncomeSub">Salary + all other income</div></div>
-        <div class="stat"><div class="stat-top"><small>Spent this month</small><span class="stat-ico" style="background:linear-gradient(145deg,#f05266,#d83d52)">
+        <div class="stat"><div class="stat-top"><small>This month spending</small><span class="stat-ico" style="background:linear-gradient(145deg,#f05266,#d83d52)">
           <svg viewBox="0 0 24 24"><path d="M12 20V4M7 15l5 5 5-5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div class="value" id="kSpent">EGP 0</div><div class="delta" id="kSpentSub">Everything you paid</div></div>
-        <div class="stat"><div class="stat-top"><small>Saved this month</small><span class="stat-ico" style="background:linear-gradient(145deg,#00b7a8,#078c84)">
+        <div class="stat"><div class="stat-top"><small>This month difference</small><span class="stat-ico" style="background:linear-gradient(145deg,#00b7a8,#078c84)">
           <svg viewBox="0 0 24 24"><path d="M5 8h14v10H5z" fill="white"/><path d="M8 8V6.5A2.5 2.5 0 0 1 10.5 4h3A2.5 2.5 0 0 1 16 6.5V8" stroke="white" stroke-width="1.8" fill="none"/><path d="M8 12h8" stroke="#098f86" stroke-width="1.7"/></svg></span></div><div class="value" id="kSaved">EGP 0</div><div class="delta" id="kSavedSub">Income minus expenses</div></div>
       </div>
 
@@ -1302,6 +1328,17 @@ html[data-theme="light"][data-palette="solar"]{--skin-bg0:#F1EBDD;--skin-bg1:#F6
     </section>
 
     <section class="view" id="view-transactions">
+      <div class="activity-scope-box" id="activityScopeBox">
+        <div class="activity-scope-copy">
+          <b id="activityScopeTitle">What activity do you want to see?</b>
+          <span id="activityScopeHelp">This only changes the transaction report below. Your real money-in-hand balance never changes.</span>
+        </div>
+        <div class="global-period" id="globalPeriodSwitch" aria-label="Activity period">
+          <button type="button" data-period="day">Today</button>
+          <button type="button" data-period="month" class="active">This month</button>
+          <button type="button" data-period="year">This year</button>
+        </div>
+      </div>
       <div class="tx-command-hero">
         <div>
           <div class="mw-eyebrow" id="txEyebrow">⚡ SMART TRANSACTION HUB</div>
@@ -5308,6 +5345,69 @@ renderDashboard=function(){__smartOldRenderDashboard();try{renderDashboardPeriod
 const __smartOldApplyLanguage=applyAppLanguage;
 applyAppLanguage=function(){__smartOldApplyLanguage();try{applyAppLanguageSmart();renderSmartTransactions();renderDashboardPeriodCards()}catch(e){}};
 setTimeout(()=>{smartPeriodEnsure();bindSmartPeriod();bindSmartTransactions();fullThemePalette();applyAppLanguageSmart();try{renderSmartTransactions();renderDashboardPeriodCards();drawCategory()}catch(e){}},80);
+
+
+/* ===== Clarity-first behavior ===== */
+window.editTransaction=function(id){
+ if(typeof window.editTx==='function')return window.editTx(id);
+ const t=(state.transactions||[]).find(x=>x.id===id);if(!t)return toast('Transaction not found');
+ editingTxId=id;openEntry('form');
+ setType(t.type==='income'?'income':'expense');
+ document.querySelector('#entryModal .modal-head h3').textContent=state.profile.appLang==='ar'?'تعديل المعاملة':'Edit transaction';
+ document.getElementById('saveEntry').textContent=state.profile.appLang==='ar'?'حفظ التعديلات':'Save changes';
+ document.getElementById('entryName').value=t.name||'';
+ document.getElementById('entryAmount').value=t.amount||'';
+ document.getElementById('entryDate').value=t.date||today();
+ document.getElementById('entryCategory').value=t.category||'';
+ document.getElementById('entryPaymentMethod').value=inferPaymentMethod(t);
+ document.getElementById('entryAccount').value=t.accountId||state.accounts[0]?.id||'';
+ document.getElementById('entryCard').value=t.cardId||'';
+ document.getElementById('entryFrequency').value=t.frequency||'one-time';
+ document.getElementById('entryNote').value=t.note||'';
+ syncPaymentMethodUI();
+};
+function renderSimpleMoneySnapshot(){
+ const balance=allLiquid(),m=calcMonth(),lang=state.profile.appLang||'en';
+ const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+ set('snapshotHandValue',money(balance));set('snapshotMonthIn',money(m.income));set('snapshotMonthOut',money(m.spent));set('snapshotMonthNet',(m.saved>=0?'+':'')+money(m.saved));
+ const net=document.getElementById('snapshotMonthNet');if(net)net.style.color=m.saved>=0?'var(--skin-positive)':'var(--skin-danger)';
+ if(lang==='ar'){
+   set('snapshotHandLabel','المال المتاح معك الآن');set('snapshotHandHelp','المبلغ المتاح فعلياً الآن في الكاش والبنوك والمحافظ. هذا الرقم لا يتغير عند تغيير عرض المعاملات.');
+   set('snapshotMonthInLabel','دخل هذا الشهر');set('snapshotMonthOutLabel','مصروف هذا الشهر');set('snapshotMonthNetLabel','الفرق هذا الشهر');
+ }else{
+   set('snapshotHandLabel','Money in hand now');set('snapshotHandHelp','What is actually available across your cash, bank and wallet accounts right now. This number never changes when you change transaction views.');
+   set('snapshotMonthInLabel','Came in this month');set('snapshotMonthOutLabel','Spent this month');set('snapshotMonthNetLabel','Left from this month');
+ }
+}
+function renderDashboardPeriodCards(){
+ // Dashboard is intentionally fixed: real balance + current month activity.
+ // Today/Month/Year is now only a transaction-report filter.
+ const m=calcMonth(),balance=allLiquid();
+ const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+ set('kBalance',money(balance));set('kIncome',money(m.income));set('kSpent',money(m.spent));set('kSaved',money(m.saved));
+ const ks=document.getElementById('kSaved');if(ks)ks.style.color=m.saved<0?'var(--skin-danger)':'var(--skin-positive)';
+ renderSimpleMoneySnapshot();
+}
+function setSmartPeriod(mode){
+ if(!['day','month','year'].includes(mode))return;
+ smartPeriodEnsure();state.profile.settings.periodMode=mode;
+ try{localStorage.setItem('masrMoneyState',JSON.stringify(state))}catch(e){}
+ document.querySelectorAll('#globalPeriodSwitch button').forEach(b=>b.classList.toggle('active',b.dataset.period===mode));
+ try{renderSmartTransactions();drawCategory();renderTransactionLiveCards()}catch(e){console.warn(e)}
+ actionFeedback('nav');
+}
+function applyClarityLanguage(){
+ const ar=(state.profile.appLang||'en')==='ar',set=(id,en,a)=>{const e=document.getElementById(id);if(e)e.textContent=ar?a:en};
+ set('activityScopeTitle','What activity do you want to see?','ما هي الفترة التي تريد مراجعة حركتها؟');
+ set('activityScopeHelp','This only changes the transaction report below. Your real money-in-hand balance never changes.','هذا يغير تقرير المعاملات فقط. رصيد المال المتاح معك الآن لا يتغير.');
+ document.querySelectorAll('#globalPeriodSwitch button').forEach(b=>{b.textContent=ar?({day:'اليوم',month:'هذا الشهر',year:'هذه السنة'}[b.dataset.period]):({day:'Today',month:'This month',year:'This year'}[b.dataset.period])});
+ renderSimpleMoneySnapshot();
+}
+const __clarityLang=applyAppLanguage;
+applyAppLanguage=function(){__clarityLang();try{applyClarityLanguage()}catch(e){}};
+const __clarityDashboard=renderDashboard;
+renderDashboard=function(){__clarityDashboard();try{renderDashboardPeriodCards()}catch(e){}};
+setTimeout(()=>{try{renderSimpleMoneySnapshot();applyClarityLanguage();bindSmartPeriod();bindSmartTransactions()}catch(e){}},120);
 
 </script>
 </body>
